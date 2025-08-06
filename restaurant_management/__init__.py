@@ -1,4 +1,7 @@
-from django.contrib import admin
-from .models import Menu, Order
-admin.site.register(Menu)
-admin.site.register(Order)
+from django.db import models
+class MenuItem(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.textField()
+    price = models.DecimalField(max_degits=6, decimal_places=2)
+    def __str__(self):
+        return self.name
