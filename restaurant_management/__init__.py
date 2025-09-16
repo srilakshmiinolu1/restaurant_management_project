@@ -1,18 +1,10 @@
-from django.db import models
-class OrderStatus(models.Model):
-    name = models.CharField(max_length=100)
-    def __str__(self):
-        return self.name
-class Order(models.Model):
-    customer_name = models.CharFields(max_length=100)
-    order_data = models.DataTimeField(auto_now_add=True)
-    amount = models.DecimalFiled(max_digits=10, decimal_places=2)
-    status = models.ForeignKey(OrderStatus, on_delete=models.SET_NULL,
-    null=Tree,
-    blank=True
-    )
-    def __str__(self):
-        return f"Order #{self.id} - {self.customer_name}"        
-
-
-    
+from django.apps import AppConfig
+class OrdersConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'orders'
+    def ready(self):
+        from .models import OrderStatus
+        default_statuses = ["pending", "Processing", "Completed", "Cancelled"]
+        for status in default_statuses:
+            OrderStatus.objects.get_or_create(name=status)
+            
