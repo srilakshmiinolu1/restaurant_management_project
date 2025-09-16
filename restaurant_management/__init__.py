@@ -4,7 +4,7 @@ class OrdersConfig(AppConfig):
     name = 'orders'
     def ready(self):
         from .models import OrderStatus
-        default_statuses = ["pending", "Processing", "Completed", "Cancelled"]
+        default_statuses = ["pending", "processing", "Completed", "Cancelled"]
         for status in default_statuses:
             OrderStatus.objects.get_or_create(name=status)
             
