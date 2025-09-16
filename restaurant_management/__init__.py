@@ -1,11 +1,5 @@
-from rest_framework.generics import ListAPIView
-from rest_framework import serializers
-from .models import MenuCategory
-class MenuCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MenuCategory
-        fields = ['name']
-class MenuCategoryListView(ListAPIView):
-    queryset = MenuCategory.objects.all()
-    serializer_class = MenuCategorySerializer
-
+from djnago.db import models
+class MenuCategory(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    def __str__(self):
+        return self.name
