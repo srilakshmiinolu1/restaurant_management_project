@@ -1,32 +1,18 @@
-from django.db import models
-class MenuItem(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
-    from rest_framework import serializers
-    from .models import MenuItem
-    class MenuItemSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = MenuItem
-            fields = ['id', 'name', 'description', 'price']
-from rest_framework import viewests, filters
-from rest_framework.pagination import pageNumberPagination
-from .models import MenuItem
-from .serializers import MenuItemSerializer
-class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 100
-class MenuItemViewSet(viewsets.ModelViewSet):
-    queryset = MenuItem.objects.all()
-    serializers_class = MenuItemSerializer
-    filter_backends = [filters.SearchFilter]
-    serach_fields = ['name']
-    pagination_class = StandardResulttsPagination
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import MenuItemViewSet
-router = DefaultRouter()
-router .register(r'menu-items', MenuItemViewSet, basename='menuitem')
-urlpatterns = [path('', include(router.urls)),]
-      
+from djnago.db import models
+from django.conf import settings
+from home.models import Product
+class Order(models.Model):
+    order_id = models.Charfield(max_length=100, unique=True)
+    costomer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="orders")
+    total_price = models.DecimalField(max_digit=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"order{self.order_id} by {self.customer}"
+class OrderItem(models.Model):
+    order = models.ForeignKey(order, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(product, in_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"
+
+
